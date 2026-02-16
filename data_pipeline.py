@@ -217,7 +217,9 @@ class EuroleaguePipeline:
         """Fetch league standings.
 
         Args:
-            round_number: Round to get standings for (max=34 for regular season)
+            round_number: Round to get standings for (max=34 for regular season).
+                          Auto-retries with lower rounds if the requested round
+                          doesn't exist yet (mid-season).
             endpoint: 'basicstandings', 'streaks', 'aheadbehind', 'margins'
         """
         if not HAS_API:
@@ -228,18 +230,23 @@ class EuroleaguePipeline:
         if cached is not None:
             return cached
 
-        logger.info(f"Fetching standings: round={round_number}")
-        try:
-            df = self.standings_api.get_standings(
-                season=self.season,
-                round_number=round_number,
-                endpoint=endpoint
-            )
-            self._cache_set(key, df)
-            return df
-        except Exception as e:
-            logger.error(f"Failed to fetch standings: {e}")
-            return pd.DataFrame()
+        # Try requested round, then fall back to lower rounds (for mid-season)
+        for rnd in range(round_number, 0, -1):
+            logger.info(f"Fetching standings: round={rnd}")
+            try:
+                df = self.standings_api.get_standings(
+                    season=self.season,
+                    round_number=rnd,
+                    endpoint=endpoint
+                )
+                if df is not None and not df.empty:
+                    self._cache_set(key, df)
+                    return df
+            except Exception as e:
+                if rnd == 1:
+                    logger.error(f"Failed to fetch standings: {e}")
+                continue
+        return pd.DataFrame()
 
     # ─── Shot Data ────────────────────────────────────────────
     def get_shot_data_season(self) -> pd.DataFrame:

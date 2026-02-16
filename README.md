@@ -1,4 +1,4 @@
-# Euroleague Analytics Pro
+# Euroleague Analytics
 
 End-to-end sports analytics platform with **live Euroleague API integration**, ML models, interactive Streamlit dashboard, and professional data science practices.
 
@@ -91,7 +91,7 @@ The notebook's analysis parameters are in the CONFIG cell:
 
 ```python
 CONFIG = {
-    "season": 2024,            # 2024-25 season
+    "season": 2025,            # 2025-26 season
     "player_name": "Hayes",    # Partial name match
 }
 ```
@@ -99,10 +99,10 @@ CONFIG = {
 ### CLI Data Pipeline
 
 ```bash
-python data_pipeline.py --season 2024 --action info
-python data_pipeline.py --season 2024 --player "Tavares" --action player
-python data_pipeline.py --season 2024 --action team
-python data_pipeline.py --season 2024 --action standings
+python data_pipeline.py --season 2025 --action info
+python data_pipeline.py --season 2025 --player "Tavares" --action player
+python data_pipeline.py --season 2025 --action team
+python data_pipeline.py --season 2025 --action standings
 ```
 
 ## Project Structure

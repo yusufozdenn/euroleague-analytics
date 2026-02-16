@@ -1,5 +1,5 @@
 """
-Euroleague Analytics Pro - Streamlit Dashboard
+Euroleague Analytics - Streamlit Dashboard
 ===============================================
 Team-first interactive dashboard. Select a team, then explore rosters,
 player performance, league standings, feature analysis, model results,
@@ -28,7 +28,7 @@ CACHE_DIR = BASE_DIR / "cache"
 PLOTLY_TEMPLATE = "plotly_dark"
 
 st.set_page_config(
-    page_title="Euroleague Analytics Pro",
+    page_title="Euroleague Analytics",
     page_icon="\U0001F3C0",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -245,7 +245,7 @@ def load_scaler():
 # ---------------------------------------------------------------------------
 def _get_season_int() -> int:
     cfg = load_config()
-    return int(cfg.get("season", "2024"))
+    return int(cfg.get("season", "2025"))
 
 
 def _parse_minutes(mp_str) -> float:
@@ -292,7 +292,8 @@ def get_team_name_map(standings_df: pd.DataFrame) -> dict:
 cfg = load_config()
 season_int = _get_season_int()
 
-st.sidebar.title("\U0001F3C0 Euroleague Analytics Pro")
+st.sidebar.title("\U0001F3C0 Euroleague Analytics")
+st.sidebar.caption(f"made by Yusuf Özden")
 st.sidebar.caption(f"Season {season_int}-{season_int + 1}")
 
 # Load core data
@@ -1201,5 +1202,5 @@ PAGES = {
 PAGES[page]()
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Euroleague Analytics Pro v1.0")
+st.sidebar.caption("Euroleague Analytics v1.0")
 st.sidebar.caption(f"Data: {season_int}-{season_int + 1} Season")
