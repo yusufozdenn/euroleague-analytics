@@ -1,0 +1,12 @@
+{
+  "season": "2024",
+  "player_name": "Hayes",
+  "static_csv": "nhd_euroleague.csv",
+  "output_dir": "outputs",
+  "seed": "42",
+  "test_size": "7",
+  "ts_splits": "3",
+  "rolling_windows": "[3, 5, 7]",
+  "lag_periods": "[1, 2, 3]",
+  "ewma_spans": "[3, 5]"
+}

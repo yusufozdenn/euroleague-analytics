@@ -1,0 +1,6 @@
+Scenario,FG_pct,PTS_per_min,Pred_GmSc,CI_low,CI_high
+Average Night,0.45,0.4,1.66,-1.85,7.82
+Hot Shooting,0.65,0.55,1.66,-1.56,8.24
+Cold Night,0.25,0.2,1.66,-2.41,8.36
+Scoring Explosion,0.55,0.7,1.66,-2.4,7.98
+Efficient Role,0.7,0.35,1.66,-2.17,7.37
