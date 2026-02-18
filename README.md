@@ -9,7 +9,7 @@ Euroleague API  ──►  data_pipeline.py  ──►  Feature Engineering  ─
      │                     │                       │                     │               │
   REST API           Parquet Cache            40+ Features          10+ Models       Streamlit
   Live Data           (6h TTL)              Rolling/EWMA/Lag       TensorFlow       Interactive
-  18 Teams                                  TS%/eFG%/GmSc          XGBoost         ARIMA Forecast
+  20 Teams                                  TS%/eFG%/GmSc          XGBoost         ARIMA Forecast
   9000+ Games                                                      Stacking        Team/Player
 ```
 
@@ -18,7 +18,7 @@ Euroleague API  ──►  data_pipeline.py  ──►  Feature Engineering  ─
 | Capability | Implementation |
 |-----------|---------------|
 | **Interactive Dashboard** | Streamlit app with team/player selectors, 6 pages, Plotly charts |
-| **Data Source** | Live Euroleague API — all 18 teams, 9000+ game boxscores |
+| **Data Source** | Live Euroleague API — all 20 teams, 9000+ game boxscores |
 | **Data Pipeline** | `data_pipeline.py` with Parquet caching, multi-season support |
 | **Feature Engineering** | 40+ features: TS%, eFG%, GmSc, rolling stats, EWMA, lag, momentum |
 | **ML Models** | Ridge, Lasso, ElasticNet, RF, XGBoost, LightGBM, SVR, KNN, Keras NN, Stacking |
@@ -67,7 +67,7 @@ The interactive dashboard (`dashboard.py`) provides 6 pages:
 
 ![Player Performance](screenshots/player_performance.png)
 
-**League Standings** — All 18 teams ranked, team stats comparison across any metric
+**League Standings** — All 20 teams ranked, team stats comparison across any metric
 
 ![League Standings](screenshots/league_standings.png)
 
