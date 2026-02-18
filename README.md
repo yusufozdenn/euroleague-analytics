@@ -92,7 +92,7 @@ The notebook's analysis parameters are in the CONFIG cell:
 ```python
 CONFIG = {
     "season": 2025,            # 2025-26 season
-    "player_name": "Hayes",    # Partial name match
+    "player_name": "Horton-Tucker",    # Partial name match
 }
 ```
 
