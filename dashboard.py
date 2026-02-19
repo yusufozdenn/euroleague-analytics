@@ -1143,39 +1143,71 @@ def page_predictions():
         conf_int = forecast_result.conf_int(alpha=0.10)
 
         hist_x = list(range(1, len(pts_series) + 1))
-        fore_x = list(range(len(pts_series) + 1, len(pts_series) + 1 + forecast_steps))
+        fore_x_full = [hist_x[-1]] + list(range(len(pts_series) + 1,
+                                                  len(pts_series) + 1 + forecast_steps))
+        fore_x_only = fore_x_full[1:]
+
+        lower = conf_int.iloc[:, 0].values
+        upper = conf_int.iloc[:, 1].values
+        mean_vals = forecast_mean.values
+
+        # Monte Carlo simulation paths using ARIMA residuals
+        residuals = arima_fit.resid.values
+        n_sim = 30
+        np.random.seed(42)
+        sim_paths = []
+        for _ in range(n_sim):
+            path = [pts_series.values[-1]]
+            for s in range(forecast_steps):
+                noise = np.random.choice(residuals)
+                path.append(max(mean_vals[s] + noise, 0))
+            sim_paths.append(path)
 
         fig_fc = go.Figure()
+
+        # Historical
         fig_fc.add_trace(go.Scatter(
             x=hist_x, y=pts_series.values,
             mode="lines+markers", name="Historical",
             line=dict(color="#636EFA", width=2), marker=dict(size=4),
         ))
 
-        lower = conf_int.iloc[:, 0].values
-        upper = conf_int.iloc[:, 1].values
+        # Simulation paths (light, transparent)
+        for i, path in enumerate(sim_paths):
+            fig_fc.add_trace(go.Scatter(
+                x=fore_x_full, y=path,
+                mode="lines", showlegend=(i == 0),
+                name="Simulated Paths" if i == 0 else None,
+                line=dict(color="rgba(99, 110, 250, 0.12)", width=1),
+                hoverinfo="skip",
+            ))
+
+        # CI band
         fig_fc.add_trace(go.Scatter(
-            x=fore_x + fore_x[::-1],
+            x=fore_x_only + fore_x_only[::-1],
             y=list(upper) + list(lower[::-1]),
-            fill="toself", fillcolor="rgba(99, 110, 250, 0.15)",
-            line=dict(color="rgba(99, 110, 250, 0)"), name="90% CI",
+            fill="toself", fillcolor="rgba(0, 204, 150, 0.12)",
+            line=dict(color="rgba(0, 204, 150, 0)"), name="90% CI",
         ))
+
+        # Mean forecast line (connected from last historical)
         fig_fc.add_trace(go.Scatter(
-            x=fore_x, y=forecast_mean.values,
-            mode="lines+markers", name="Forecast",
-            line=dict(color="#00CC96", width=2, dash="dash"),
+            x=fore_x_full, y=[pts_series.values[-1]] + list(mean_vals),
+            mode="lines+markers", name="Forecast (mean)",
+            line=dict(color="#00CC96", width=2.5, dash="dash"),
             marker=dict(size=6, symbol="diamond"),
         ))
+
         fig_fc.update_layout(
             template=PLOTLY_TEMPLATE, xaxis_title="Game #", yaxis_title="Points",
-            height=420, legend=dict(orientation="h", y=-0.15),
+            height=450, legend=dict(orientation="h", y=-0.15),
         )
         st.plotly_chart(fig_fc, use_container_width=True)
 
         with st.expander("Forecast Values"):
             fc_table = pd.DataFrame({
-                "Game #": fore_x,
-                "Forecast PTS": forecast_mean.values.round(2),
+                "Game #": fore_x_only,
+                "Forecast PTS": mean_vals.round(2),
                 "CI Low (90%)": lower.round(2),
                 "CI High (90%)": upper.round(2),
             })
