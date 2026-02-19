@@ -42,6 +42,8 @@ outputs/plots/
 outputs/models/
 outputs/*.joblib
 
-# Keep CSV outputs and config (small, useful for dashboard)
+# Keep CSV outputs, config, and model files (small, needed for dashboard)
 !outputs/*.csv
 !outputs/config.json
+!outputs/best_model.joblib
+!outputs/scaler.joblib
